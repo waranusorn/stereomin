@@ -112,7 +112,11 @@
 
         getBtn.addEventListener('click', () => {
             tbody.innerHTML = '';
-            fetch(apiUrl)
+            fetch(apiUrl, {
+                headers: {
+                    'Accept-Language': 'th'
+                }
+            })
                 .then(r => r.json())
                 .then(data => JSON.parse(data.contents))
                 .then(data => {

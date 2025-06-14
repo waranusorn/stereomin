@@ -99,7 +99,7 @@
     </div>
 
     <script>
-        const apiUrl = 'https://www.monomax.me/api/v2/highlights';
+        const apiUrl = "https://api.allorigins.win/get?url=https://www.monomax.me/api/v2/highlights";
 
         const getBtn = document.getElementById('getMovies');
         const table = document.getElementById('movieTable');
@@ -114,6 +114,7 @@
             tbody.innerHTML = '';
             fetch(apiUrl)
                 .then(r => r.json())
+                .then(data => JSON.parse(data.contents))
                 .then(data => {
                     data.data.forEach(movie => {
                         const tr = document.createElement('tr');

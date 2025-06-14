@@ -99,23 +99,7 @@
     </div>
 
     <script>
-        const mockMovies = [
-            {
-                name: 'Movie One',
-                img: 'https://via.placeholder.com/150x220?text=Poster+1',
-                description: 'Description for movie one.'
-            },
-            {
-                name: 'Movie Two',
-                img: 'https://via.placeholder.com/150x220?text=Poster+2',
-                description: 'Description for movie two.'
-            },
-            {
-                name: 'Movie Three',
-                img: 'https://via.placeholder.com/150x220?text=Poster+3',
-                description: 'Description for movie three.'
-            }
-        ];
+        const apiUrl = 'https://www.monomax.me/api/v2/highlights';
 
         const getBtn = document.getElementById('getMovies');
         const table = document.getElementById('movieTable');
@@ -128,20 +112,24 @@
 
         getBtn.addEventListener('click', () => {
             tbody.innerHTML = '';
-            mockMovies.forEach(movie => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${movie.name}</td>
-                    <td><img src="${movie.img}" alt="${movie.name}"></td>
-                    <td>${movie.description}</td>
-                    <td><button class="viewBtn">View</button></td>
-                `;
-                tr.querySelector('.viewBtn').addEventListener('click', () => {
-                    showDetail(movie);
+            fetch(apiUrl)
+                .then(r => r.json())
+                .then(data => {
+                    data.data.forEach(movie => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${movie.title}</td>
+                            <td><img src="${movie.poster}" alt="${movie.title}"></td>
+                            <td>${movie.description}</td>
+                            <td><button class="viewBtn">View</button></td>
+                        `;
+                        tr.querySelector('.viewBtn').addEventListener('click', () => {
+                            showDetail(movie);
+                        });
+                        tbody.appendChild(tr);
+                    });
+                    table.style.display = 'table';
                 });
-                tbody.appendChild(tr);
-            });
-            table.style.display = 'table';
         });
 
         closeDetail.addEventListener('click', () => {
@@ -149,8 +137,8 @@
         });
 
         function showDetail(movie) {
-            detailName.textContent = movie.name;
-            detailImg.src = movie.img;
+            detailName.textContent = movie.title;
+            detailImg.src = movie.poster;
             detailDesc.textContent = movie.description;
             document.getElementById('shortDesc').value = '';
             detailPanel.style.display = 'flex';

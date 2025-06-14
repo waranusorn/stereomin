@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Listing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #fff;
+            color: #000;
+        }
+        button, input[type="text"] {
+            padding: 8px 12px;
+            border: 1px solid #000;
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        img {
+            max-width: 100px;
+            border-radius: 6px;
+        }
+        /* Detail Panel Styles */
+        #detailPanel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        #detailContent {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+        #detailContent img {
+            width: 100%;
+            height: auto;
+        }
+        #closeDetail {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #fff;
+            border: 1px solid #000;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            line-height: 22px;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="getMovies">Get Movies</button>
+    <table id="movieTable" style="display:none;">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Poster</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Detail Panel -->
+    <div id="detailPanel">
+        <div id="detailContent">
+            <div id="closeDetail">&times;</div>
+            <h2 id="detailName"></h2>
+            <img id="detailImg" src="" alt="Movie Poster">
+            <p id="detailDesc"></p>
+            <label>
+                Short desc: <input type="text" id="shortDesc">
+            </label>
+        </div>
+    </div>
+
+    <script>
+        const mockMovies = [
+            {
+                name: 'Movie One',
+                img: 'https://via.placeholder.com/150x220?text=Poster+1',
+                description: 'Description for movie one.'
+            },
+            {
+                name: 'Movie Two',
+                img: 'https://via.placeholder.com/150x220?text=Poster+2',
+                description: 'Description for movie two.'
+            },
+            {
+                name: 'Movie Three',
+                img: 'https://via.placeholder.com/150x220?text=Poster+3',
+                description: 'Description for movie three.'
+            }
+        ];
+
+        const getBtn = document.getElementById('getMovies');
+        const table = document.getElementById('movieTable');
+        const tbody = table.querySelector('tbody');
+        const detailPanel = document.getElementById('detailPanel');
+        const detailName = document.getElementById('detailName');
+        const detailImg = document.getElementById('detailImg');
+        const detailDesc = document.getElementById('detailDesc');
+        const closeDetail = document.getElementById('closeDetail');
+
+        getBtn.addEventListener('click', () => {
+            tbody.innerHTML = '';
+            mockMovies.forEach(movie => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${movie.name}</td>
+                    <td><img src="${movie.img}" alt="${movie.name}"></td>
+                    <td>${movie.description}</td>
+                    <td><button class="viewBtn">View</button></td>
+                `;
+                tr.querySelector('.viewBtn').addEventListener('click', () => {
+                    showDetail(movie);
+                });
+                tbody.appendChild(tr);
+            });
+            table.style.display = 'table';
+        });
+
+        closeDetail.addEventListener('click', () => {
+            detailPanel.style.display = 'none';
+        });
+
+        function showDetail(movie) {
+            detailName.textContent = movie.name;
+            detailImg.src = movie.img;
+            detailDesc.textContent = movie.description;
+            document.getElementById('shortDesc').value = '';
+            detailPanel.style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
